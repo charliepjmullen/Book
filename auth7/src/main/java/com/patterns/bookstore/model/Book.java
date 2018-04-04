@@ -40,6 +40,16 @@ public class Book {
 		this.quantity = quantity;
 	}
 	
+	public Book(String title, double price, String author, String category, String image, int quantity) {
+		
+		this.title = title;
+		this.price = price;
+		this.author = author;
+		this.category = category;
+		this.image = image;
+		this.quantity = quantity;
+	}
+	
 	public Book(Long id, String title, double price, String author, String category) {
 		this.id= id;
 		this.title = title;

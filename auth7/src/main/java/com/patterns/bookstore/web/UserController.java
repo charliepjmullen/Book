@@ -1,5 +1,6 @@
 package com.patterns.bookstore.web;
 
+ 
 import com.patterns.bookstore.model.Book;
 import com.patterns.bookstore.model.Review;
 import com.patterns.bookstore.model.User;
@@ -66,6 +67,7 @@ public class UserController {
         userService.save(userForm);
 
         securityService.autologin(userForm.getUsername(), userForm.getPasswordConfirm());
+        
 
         return "redirect:/welcome";
     }
@@ -84,8 +86,23 @@ public class UserController {
     @RequestMapping(value = {"/", "/welcome"}, method = RequestMethod.GET)
     public String welcome() {
     	
+    	 Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
+         String username = loggedInUser.getName(); // Authentication for 
+         User user = userRepository.findByUsername(username);
+    	
+         String result;
+         
+         if(user.getUsername().equals("bookstore_Admin")) {
+        	 result = "adminwelcome";
+        }
+        
+        else{
+        	result = ("welcome");
+        	}
 
-        return "welcome";
+        return result;
+        
+       
     }
     
     @RequestMapping(value = "viewallbooks", method = RequestMethod.GET)
@@ -166,7 +183,7 @@ public class UserController {
       user.saveBookToShoppingCart(book);
       userRepository.save(user);
 
-      return "bookList";
+      return "bookAddedToShoppingCart";
     }
     
     @RequestMapping(value = "/viewShoppingCart", method = RequestMethod.GET)
@@ -202,7 +219,7 @@ public class UserController {
         
         model.addAttribute("shoppingCart", shoppingCart);
         
-		return "welcome";
+		return "bookDeleted";
     }
     
     @RequestMapping(value = " /checkout", method=RequestMethod.GET)
@@ -270,6 +287,41 @@ public class UserController {
         model.addAttribute("reviews", reviews);
     	
     	return "/";
+    }
+    
+    @RequestMapping(value="addbook", method=RequestMethod.GET)
+    public String addBook(Book book, @RequestParam("title") String title,
+            						 @RequestParam("author") String author, 
+            						 @RequestParam("price") double price, 
+            						 @RequestParam("category") String category, 
+            						 @RequestParam("image") String image, 
+            						 @RequestParam("quantity") int quantity) {
+    	
+    	bookRepository.save(book);
+      
+    	return "bookAddedToDB";
+    }
+    
+    @RequestMapping(value="/searchfunction", method=RequestMethod.GET)
+    @ResponseBody
+    public List<Book> searchbooks()
+    {
+    	   
+    	List<Book> searchresults = bookRepository.findAll();	   
+    	return searchresults;   
+    }
+    
+    @RequestMapping(value="/showbooks", method=RequestMethod.GET)
+    public String printSearchResults() {
+        
+        return "bookList";
+
+    }
+    
+    @RequestMapping(value="viewOrders", method=RequestMethod.GET)
+    public String viewAllOrders() {
+    	
+    	return "customerOrders";
     }
     
     

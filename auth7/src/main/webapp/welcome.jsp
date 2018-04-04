@@ -14,7 +14,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Create an account</title>
+    <title>Book Store - User</title>
 
    <%--  <link href="${contextPath}/resources/css/bootstrap.min.css" rel="stylesheet"> --%>
 
@@ -37,7 +37,7 @@
     </c:if>
 <a href = "viewShoppingCart">My Shopping Cart</a>    
 <a href = "viewallbooks">View All Books</a>
-<a href = "addBook">Add Book</a>
+
 </div>
 
   

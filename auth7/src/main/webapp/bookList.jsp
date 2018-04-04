@@ -16,6 +16,11 @@
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
 <title>Insert title here</title>
 </head>
+<style>
+table, th, td {
+    border: 1px solid black;
+}
+</style> 
 <script>
 
 function addBook(){
@@ -34,6 +39,50 @@ function addBook(){
 		}
 
 
+$(document).ready(function() {
+		
+		// DO GET
+		$.ajax({
+			type : "GET",
+			url : "/searchfunction",
+			success: function(result){
+				$.each(result, function(i, book){
+					
+					var customerRow = '<tr>' +
+										
+										'<td width="3.5%" height="50">' + book.author + '</td>' +
+										'<td width="3.5%" height="50">' + book.title + '</td>' +
+										'<td width="3.5%" height="50">' + book.price + '</td>' +
+										'<td width="3.5%" height="50">' + book.category + '</td>' +
+										'<td width="3.5%" height="50">' + book.image + '</td>' +
+										'<td width="3.5%" height="50">' + book.quantity + '</td>' +
+										'<td width="3.5%" height="50"><a href="/book/'+ book.id +'"> View Book</a></td>' + 	  						 
+								        '<td width="3.5%" height="50"><a href="/shoppingcart/' + book.id +'">  Add to Cart</a></td>' + '</tr>';
+				   							
+				 				
+									
+					$('#customerTable tbody').append(customerRow);
+				
+		        });
+				
+				$( "#customerTable tbody tr:odd" ).addClass("info");
+				$( "#customerTable tbody tr:even" ).addClass("success");
+			},
+			error : function(e) {
+				alert("ERROR: ", e);
+				console.log("ERROR: ", e);
+			}
+		});
+		
+		// do Filter on View
+		 $("#inputFilter").on("keyup", function() {
+		    var inputValue = $(this).val().toLowerCase();
+		    $("#customerTable tr").filter(function() {
+		    	$(this).toggle($(this).text().toLowerCase().indexOf(inputValue) > -1)
+		    });
+		}); 
+	})
+
 </script>
 
 <body>
@@ -41,9 +90,43 @@ function addBook(){
  
  <a href = "/">Home</a>
 	
-	<table>
+			<h2>All Books</h2>
+		<div class="row col-md-7 ">
+		 
+		  	<input class="form-control" id="inputFilter" type="text" placeholder="Search for Title, Author, or Category.." /><br>
+		  	</div>
+		  	
+			<table id="customerTable" class="table table-bordered table-hover table-responsive">
+				<thead>
+					<tr>
+					      <th class="tg-address">Author</th>
+			
+			<th class="tg-houseprice">Title</th>
+			
+			<th class="tg-houseprice">Price</th>
+			
+			<th  class="tg-crimerating">Category</th>
+			 
+			<th  class="tg-schools">Book Cover</th>
+			 
+			<th  class="tg-bars">Amount in Stock</th>
+			 
+			<th  class="tg-bars"> </th>	
+			
+			<th  class="tg-uiversity"> </th>
+
+										
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+			
+		
+	
+<%-- 	<table>
 	<tr>
-	        <th></th>
+	    
 	        <th class="tg-address">Title</th>
 			
 			<th class="tg-houseprice">Price</th>
@@ -56,7 +139,7 @@ function addBook(){
 			 
 			<th  class="tg-bars">Amount in Stock</th>
 
-            <th  class="tg-bars"> </th>
+           
 		</tr>
 		
 		<c:forEach var="o" items="${booksList}" varStatus="loopStatus">
@@ -75,9 +158,9 @@ function addBook(){
 				 
 				<td width="3.5%" height="50"><c:out value="${o.quantity}"/></td>
 				
-								 	<td><a href="<c:url value='/book/${o.id}' />">
+				<td><a href="<c:url value='/book/${o.id}' />">
    							 View Book and Reviews
- 					 </a>
+ 					</a>
  			    </td>
 				 
 				<td><a href="<c:url value='/shoppingcart/${o.id}' />">
@@ -88,6 +171,6 @@ function addBook(){
              </tr>
 		</c:forEach>
 		
-</table>
+</table> --%>
 </body>
 </html>

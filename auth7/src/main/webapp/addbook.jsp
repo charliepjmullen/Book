@@ -9,7 +9,7 @@
 
 <script>
 
-function saveAreaToUser(){
+/* function saveAreaToUser(){
 
 		var title = document.getElementById("addressBox").value;
 		var price = document.getElementById("schoolAvgRating").value;
@@ -32,31 +32,23 @@ function saveAreaToUser(){
 	        }, // parameters
    datatype: 'json'
 });
-}
+} */
 
 </script>
 </head>
 <body>
 
-  <h3>Welcome, Enter The Book Details</h3>
-        <form:form method="POST" action="/addBook" modelAttribute="book">
-             <table>
-                <tr>
-                    <td><form:label path="name">Name</form:label></td>
-                    <td><form:input path="name"/></td>
-                </tr>
-                <tr>
-                    <td><form:label path="id">Id</form:label></td>
-                    <td><form:input path="id"/></td>
-                </tr>
-                <tr>
-                    <td><form:label path="contactNumber">Contact Number</form:label></td>
-                    <td><form:input path="contactNumber"/></td>
-                </tr>
-                <tr>
-                    <td><input type="submit" value="Submit"/></td>
-                </tr>
-            </table>
-        </form:form>
+  <h3>Enter The Book Details</h3>
+  <a href="/">Home</a><br>
+
+<form method="GET" action="/addbook" id="addBook" name ="addBook">
+  Book Title : <input type="text" name="title" id="title"/><br>
+  Author: <input type="text" name="author" id="author"/><br>
+  Price: <input type="text" name="price" id="price"/><br>
+  Category: <input type="text" name="category" id="category"/><br>
+  Image: <input type="file" name="image" id="image"/><br>
+  Quantity: <input type="text" name="quantity" id="quantity"/><br>
+  <input type="submit" value="Submit">
+</form>
 </body>
 </html>
