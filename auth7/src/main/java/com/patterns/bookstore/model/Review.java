@@ -10,23 +10,23 @@ public class Review {
 
 	private Long id;
 	private String username;
-	private Long book_id;
+	private String  book_title;
 	private String comment;
 	
 	public Review() {
 	}
 	
-	public Review(Long id, String username, Long book_id, String comment) {
+	public Review(Long id, String username, String book_title, String comment) {
 		this.id = id;
 		this.username = username;
 		this.comment = comment;
-		this.book_id = book_id;
+		this.book_title = book_title;
 	}
 	
-	public Review( String username, Long book_id, String comment) {
+	public Review( String username, String  book_title, String comment) {
 		this.username = username;
 		this.comment = comment;
-		this.book_id = book_id;
+		this.book_title = book_title;
 	}
 
     @Id
@@ -55,12 +55,12 @@ public class Review {
 		this.comment = comment;
 	}
 
-	public Long getBook_id() {
-		return book_id;
+	public String getBook_title() {
+		return book_title;
 	}
 
-	public void setBook_id(Long book_id) {
-		this.book_id = book_id;
+	public void setBook_id(String  book_title) {
+		this.book_title = book_title;
 	}
 	
 	

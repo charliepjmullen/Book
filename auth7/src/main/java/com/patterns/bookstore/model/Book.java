@@ -4,6 +4,7 @@ package com.patterns.bookstore.model;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;  
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -127,7 +128,7 @@ public class Book {
 		this.quantity = quantity;
 	}
 	
-	@ManyToMany
+	@ManyToMany(cascade=CascadeType.ALL)
 	@JoinTable(name = "book_reveiws", joinColumns = @JoinColumn(name = "book_id"), inverseJoinColumns = @JoinColumn(name = "review_id"))
     public List<Review> getReviews(){
 		return reviews;

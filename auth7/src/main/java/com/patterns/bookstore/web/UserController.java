@@ -1,16 +1,19 @@
 package com.patterns.bookstore.web;
 
  
-import com.patterns.bookstore.model.Book;
+import com.patterns.bookstore.model.Book;  
 import com.patterns.bookstore.model.Review;
 import com.patterns.bookstore.model.User;
 import com.patterns.bookstore.repository.BookRepository;
+import com.patterns.bookstore.repository.ReviewRepository;
 import com.patterns.bookstore.repository.UserRepository;
 import com.patterns.bookstore.service.BookService;
 import com.patterns.bookstore.service.SecurityService;
 import com.patterns.bookstore.service.UserService;
 import com.patterns.bookstore.validator.UserValidator;
 
+
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +51,10 @@ public class UserController {
     
     @Autowired 
     private UserRepository userRepository;
+    
+    @Autowired
+    private ReviewRepository reviewRepository;
+   
 
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     public String registration(Model model) {
@@ -123,46 +130,6 @@ public class UserController {
         return "addbook";
     }
     
-   /* @RequestMapping(value = "/shoppingCart/{id}", method = {RequestMethod.POST, RequestMethod.GET})
-    public String shoppingCart(@Valid Book book, Model model, @RequestParam("id") Long id) {
-    	
-    	  System.out.println(id);
-          book = bookRepository.findOne(id);
-          System.out.println("Book: " + book + "Title:" + id);
-
-          Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
-	      String username = loggedInUser.getName(); // Authentication for 
-	      User user = userRepository.findByUsername(username);
-	      
-	      user.saveBookToShoppingCart(book);
-	      userRepository.save(user);
-	      
-	      System.out.println(user + " just saved " + book.getTitle() + " to their shopping cart");
-	      
-	      
-        return "bookList";
-    }
-    */
-    
- /*   @RequestMapping(value = "/shoppingCart", method = RequestMethod.POST)
-    public @ResponseBody String shoppingCart(Book book, @RequestParam("id") Long id) {
-    	
-    	  System.out.println(id);
-          book = bookRepository.findOne(id);
-          System.out.println("Book: " + book + "Title:" + id);
-
-          Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
-	      String username = loggedInUser.getName(); // Authentication for 
-	      User user = userRepository.findByUsername(username);
-	      
-	      user.saveBookToShoppingCart(book);
-	      userRepository.save(user);
-	      
-	      System.out.println(user + " just saved " + book.getTitle() + " to their shopping cart");
-	      
-	      
-        return "bookList";
-    }*/
     
     @RequestMapping(value = " /shoppingcart/{bookId}", method=RequestMethod.GET)
     public String shoppingCart(@PathVariable("bookId")Long id, Model model) {
@@ -172,6 +139,7 @@ public class UserController {
       String username = loggedInUser.getName(); // Authentication for 
       User user = userRepository.findByUsername(username);
 
+      System.out.println(username);
       
       //Retrieve book
       Book book = bookRepository.findById(id);
@@ -239,44 +207,49 @@ public class UserController {
     	   price = b.getPrice();
     	   total += price;
       }
-      System.out.println(total);
+      //System.out.println(total);
 
       model.addAttribute("total", total);
 
       return "checkout";
     }
     
-    @RequestMapping(value = " /book/{bookId}", method=RequestMethod.GET)
+    @RequestMapping(value = "/book/{bookId}", method=RequestMethod.GET)
     public String bookReviews(@PathVariable("bookId")Long id, Model model) {
     	
         Book book = bookRepository.findById(id);
+        Long bookId = book.getId();
         String title = book.getTitle();
         String author = book.getAuthor();
         String category = book.getCategory();
         double price = book.getPrice();
         String image = book.getImage();
-        List<Review> reveiws = book.getReviews();
+        List<Review> review = book.getReviews();
         
+        model.addAttribute("bookId", bookId);
         model.addAttribute("title", title);
         model.addAttribute("author", author);
         model.addAttribute("category", category);
         model.addAttribute("price", price);
         model.addAttribute("image", image);
+        model.addAttribute("review", new Review());
         
         
 		return "bookview";
     }
     
-    @RequestMapping(value="/book/{bookId}/addreview", method=RequestMethod.POST)
-    public String addReview(@PathVariable("review") String comment, @PathVariable("bookId")Long id, Model model) {
+    @RequestMapping(value="/addreview", method=RequestMethod.GET)
+    public String addReview(@Valid Review review,/* @RequestParam("review") String comment, @RequestParam("id")Long id,  */Model model) {
     	
+    	/*Long id = (long) 1;
     	Book book = bookRepository.findById(id);
     	
     	Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
         String username = loggedInUser.getName(); // Authentication for 
         User user = userRepository.findByUsername(username);
         
-        Review review = new Review(username, id, comment);
+        
+       // reviewRepository.save(review);
         book.addReviewToBook(review);
         bookRepository.save(book);
         
@@ -285,7 +258,11 @@ public class UserController {
         List<Review> reviews = book.getReviews();
         
         model.addAttribute("reviews", reviews);
+    	*/    	Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
+        String username = loggedInUser.getName(); // Authentication for 
+        User user = userRepository.findByUsername(username);
     	
+    	System.out.println(username + " just said " + review.getComment() + " about " + review.getBook_title());
     	return "/";
     }
     
@@ -323,6 +300,58 @@ public class UserController {
     	
     	return "customerOrders";
     }
+    
+    @RequestMapping(value="payment", method=RequestMethod.GET)
+    public String paymentPage() {
+    	
+    	return "paymentPage";
+    }
+    
+    @RequestMapping(value="paymentDetails", method=RequestMethod.GET)
+    @ResponseBody
+    public String payment(@RequestParam("shipping") String shipping,
+    		              @RequestParam("creditcard") String creditcard,
+    		              @RequestParam("expirydate") String expirydate,
+    		              @RequestParam("carddetails") int carddetails,
+    		              @RequestParam("cvv") int cvv) {
+    	
+    	
+    	System.out.println("Shipping Address: " + shipping + "\n" +
+    			           "Credit Card Type: " + creditcard + "\n" +
+    			           "Expiry Date: " + expirydate + "\n" +
+    			           "Card Number: " + carddetails + "\n" +
+    			           "CVV: " + cvv + "\n");
+    	
+    	Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
+        String username = loggedInUser.getName(); // Authentication for 
+        User user = userRepository.findByUsername(username);
+        
+        user.setShipping_address(shipping);
+        userRepository.save(user);
+        
+    	return "confirmpage";
+    }
+    
+    @RequestMapping(value="paymentpage", method=RequestMethod.GET)
+    public String confirmPaymentPage(Model model) {
+    	
+    
+    	
+    	return "confirmpage";
+    }
+    
+    @RequestMapping(value="customerorders", method=RequestMethod.GET)
+    public String customerOrderPage(Model model) {
+    	
+    	Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
+        String username = loggedInUser.getName(); // Authentication for 
+        User user = userRepository.findByUsername(username);
+        
+        model.addAttribute("user", user);
+    	
+    	return "confirmpage";
+    }
+    
     
     
 }

@@ -1,6 +1,6 @@
 package com.patterns.bookstore.model;
 
-import javax.persistence.*; 
+import javax.persistence.*;  
 
 import com.patterns.bookstore.model.Book;
 
@@ -17,6 +17,7 @@ public class User {
     private String payment_details;
     private Set<Role> roles;
     private List<Book> shoppingCart;
+  /*  private Set<Book> orderHistory;*/
 
     
     
@@ -40,8 +41,8 @@ public class User {
 		this.passwordConfirm = passwordConfirm;
 	}
 
-	public User(Long id, String username, String password, String passwordConfirm, String shipping_address,
-			String payment_details, Set<Role> roles, List<Book> shoppingCart) {
+/*	public User(Long id, String username, String password, String passwordConfirm, String shipping_address,
+			String payment_details, Set<Role> roles, List<Book> shoppingCart, Set<Book> orderHistory) {
 		super();
 		this.id = id;
 		this.username = username;
@@ -51,7 +52,8 @@ public class User {
 		this.payment_details = payment_details;
 		this.roles = roles;
 		this.shoppingCart = shoppingCart;
-	}
+		this.orderHistory = orderHistory;
+	}*/
 
 	@Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -118,10 +120,18 @@ public class User {
 	public List<Book> getShoppingCart(){
 		return shoppingCart;
 	}
-
+	
 	public void setShoppingCart(List<Book> shoppingCart) {
 		this.shoppingCart = shoppingCart;
 	}
+	
+	/*public Set<Book> getOrderHistory(){
+		return orderHistory;
+	}
+	
+	public void setOrderHistory(Set<Book> orderHistory) {
+		this.orderHistory = orderHistory;
+	}*/
 	
 	public void saveBookToShoppingCart(Book book) {
 		shoppingCart.add(book);

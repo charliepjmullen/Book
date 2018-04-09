@@ -15,8 +15,11 @@
 <h3>Total: <c:out value="${total}"/></h3>
 
 <form action="/action_page.php">
-  Promo Code: <input type="text" name="promocode"><br>
-  <input type="submit" value="Submit">
-</form>
+  Promo Code: <input type="text" name="promocode">
+  <input type="submit" value="Apply Discount">
+</form><br>
+
+
+<a href="/payment">Proceed to Checkout</a>
 </body>
 </html>
