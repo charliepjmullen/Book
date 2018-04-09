@@ -38,12 +38,13 @@ function addReview(){
 <h3>Category: <c:out value="${category}"/></h3>
 <h3>Image: <c:out value="${image}"/></h3>
 		
-<form:form method="get" action="/addreview/${title}" modelAttribute="review">
+<form:form method="get" action="/addreview/${title}" >
   <textarea rows="4" cols="50" name="comment">
 Enter your Review</textarea>
-<div id="Name1">Here: <c:out value="${nameVar}"/> </div>
   <input type="submit">
 </form:form>
+
+<a href = "displayreviews">See reviews for this book</a>
 <br>
 </body>
 </html>

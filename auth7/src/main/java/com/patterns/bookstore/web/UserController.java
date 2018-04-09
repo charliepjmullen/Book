@@ -238,32 +238,30 @@ public class UserController {
 		return "bookview";
     }
     
-    @RequestMapping(value="/addreview", method=RequestMethod.GET)
-    public String addReview(@Valid Review review,/* @RequestParam("review") String comment, @RequestParam("id")Long id,  */Model model) {
-    	
-    	/*Long id = (long) 1;
-    	Book book = bookRepository.findById(id);
-    	
-    	Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
-        String username = loggedInUser.getName(); // Authentication for 
-        User user = userRepository.findByUsername(username);
-        
-        
-       // reviewRepository.save(review);
-        book.addReviewToBook(review);
-        bookRepository.save(book);
-        
-        System.out.println(username + "just reveiwed :" + book.getTitle() + "they said" + comment);
-        
-        List<Review> reviews = book.getReviews();
-        
-        model.addAttribute("reviews", reviews);
-    	*/    	Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
+    @RequestMapping(value="/addreview/{title}", method=RequestMethod.GET)
+    public String addReview(@Valid Review review, @RequestParam("comment") String comment, @PathVariable("title")String  book_title,  Model model) {
+    		
+      	Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
         String username = loggedInUser.getName(); // Authentication for 
         User user = userRepository.findByUsername(username);
     	
-    	System.out.println(username + " just said " + review.getComment() + " about " + review.getBook_title());
-    	return "/";
+    	review.setBook_title(book_title);
+    	review.setUsername(username);
+    	
+    	reviewRepository.save(review);
+    	System.out.println("Reveiw:" + review);
+    	
+    	Book book = bookRepository.findByTitle(book_title);
+    	book.addReviewToBook(review);
+    	bookRepository.save(book);
+    	
+    	System.out.println(username + " just said " + review.getComment() + " about " + book_title);
+    	
+    	List<Review> books = book.getReviews();
+    	System.out.println(books);
+    	model.addAttribute("books", books);
+    	
+    	return "reviewpage";
     }
     
     @RequestMapping(value="addbook", method=RequestMethod.GET)
@@ -272,11 +270,16 @@ public class UserController {
             						 @RequestParam("price") double price, 
             						 @RequestParam("category") String category, 
             						 @RequestParam("image") String image, 
-            						 @RequestParam("quantity") int quantity) {
+            						 @RequestParam("qua  ntity") int quantity) {
     	
     	bookRepository.save(book);
       
     	return "bookAddedToDB";
+    }
+    
+    @RequestMapping(value  ="/displayreviews", method = RequestMethod.GET)
+    public String reviewpage() {
+    	return "reviewpage";
     }
     
     @RequestMapping(value="/searchfunction", method=RequestMethod.GET)

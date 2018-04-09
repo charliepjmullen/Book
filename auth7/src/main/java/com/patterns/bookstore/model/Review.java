@@ -62,6 +62,12 @@ public class Review {
 	public void setBook_id(String  book_title) {
 		this.book_title = book_title;
 	}
+
+	public void setBook_title(String book_title) {
+		this.book_title = book_title;
+	}
+	
+	
 	
 	
     

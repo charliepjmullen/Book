@@ -1,8 +1,8 @@
 package com.patterns.bookstore.patterns;
 
-public class StockLevels_ObserverP {
+public class StockLevelsObserver {
 
-	public StockLevels_ObserverP() {
+	public StockLevelsObserver() {
 		// TODO Auto-generated constructor stub
 	}
 
