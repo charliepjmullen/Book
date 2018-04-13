@@ -46,6 +46,7 @@ function getpaymentdetails(){
   CVV Number:       <input type="number" name="cvv" id="cvv" min="1" max="3"/><br>
 
   <a onclick="getpaymentdetails()" href="paymentpage">Submit</a>
+  
 
 </body>
 </html>

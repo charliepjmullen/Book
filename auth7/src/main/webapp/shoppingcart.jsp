@@ -24,6 +24,7 @@
 	
 	   <table>
 	   <tr>
+	        <th  class="tg-university">Book Cover</th>
 	        <th></th>
 	        <th class="tg-address">Title</th>
 			<th></th>
@@ -33,12 +34,13 @@
 			 <th></th>
 			<th  class="tg-schools">Category</th>
 			 <th></th>
-			<th  class="tg-university">Book Cover</th>
+			
 
 		</tr>
 		
 		<c:forEach var="o" items="${shoppingCart}" varStatus="loopStatus">
-			<tr>			
+			<tr>		
+			    <td><img  height="200" width="150" src="<c:out value="/resources/images/${o.image}"/>"/></td>	
 			    <td></td>
 				<td   height="50"><c:out value="${o.title}"/></td>
 				<td></td>
@@ -48,10 +50,9 @@
                  <td></td>
 				<td  height="50"><c:out value="${o.category}"/></td>
 				 <td></td>
-				<td  height="50"><c:out value="${o.image}"/></td>
-								<td><a href="<c:url value='/deletebook/${o.id}' />">
+				<td><a href="<c:url value='/deletebook/${o.id}' />">
    							Remove 
- 					 </a>
+ 					</a>
  			    </td>  
              </tr>
 		</c:forEach>

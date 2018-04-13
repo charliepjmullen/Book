@@ -140,4 +140,11 @@ public class User {
 	public void removeBookFromShoppingCart(Book book) {
 		shoppingCart.remove(book);
 	}
+	
+	public void clearShoppingCart() {
+		shoppingCart.clear();
+	}
+
+	
+	
 }

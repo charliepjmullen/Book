@@ -2,7 +2,7 @@ package com.patterns.bookstore.model;
 
 
 
-import java.util.List;
+import java.util.List; 
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;  

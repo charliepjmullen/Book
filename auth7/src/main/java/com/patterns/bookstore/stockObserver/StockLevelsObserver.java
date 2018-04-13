@@ -1,4 +1,4 @@
-package com.patterns.bookstore.patterns;
+package com.patterns.bookstore.stockObserver;
 
 public class StockLevelsObserver {
 

@@ -49,16 +49,16 @@ $(document).ready(function() {
 				$.each(result, function(i, book){
 					
 					var customerRow = '<tr>' +
-										
+					                    '<td width="2%"><img height="200" width="150"src=resources/images/' + book.image + '/></td>'  +
 										'<td width="3.5%" height="50">' + book.author + '</td>' +
 										'<td width="3.5%" height="50">' + book.title + '</td>' +
 										'<td width="3.5%" height="50">' + book.price + '</td>' +
 										'<td width="3.5%" height="50">' + book.category + '</td>' +
-										'<td width="3.5%" height="50">' + book.image + '</td>' +
 										'<td width="3.5%" height="50">' + book.quantity + '</td>' +
 										'<td width="3.5%" height="50"><a href="/book/'+ book.id +'"> View Book</a></td>' + 	  						 
 								        '<td width="3.5%" height="50"><a href="/shoppingcart/' + book.id +'">  Add to Cart</a></td>' + '</tr>';
-				   							
+								        	
+								        
 				 				
 									
 					$('#customerTable tbody').append(customerRow);
@@ -99,23 +99,14 @@ $(document).ready(function() {
 			<table id="customerTable" class="table table-bordered table-hover table-responsive">
 				<thead>
 					<tr>
-					      <th class="tg-address">Author</th>
-			
-			<th class="tg-houseprice">Title</th>
-			
-			<th class="tg-houseprice">Price</th>
-			
-			<th  class="tg-crimerating">Category</th>
-			 
-			<th  class="tg-schools">Book Cover</th>
-			 
-			<th  class="tg-bars">Amount in Stock</th>
-			 
-			<th  class="tg-bars"> </th>	
-			
-			<th  class="tg-uiversity"> </th>
-
-										
+					<th  class="tg-schools">Book Cover</th>
+				    <th class="tg-address">Author</th>
+			        <th class="tg-houseprice">Title</th>
+			        <th class="tg-houseprice">Price</th>
+			        <th  class="tg-crimerating">Category</th>
+			        <th  class="tg-bars">Amount in Stock</th>
+			        <th  class="tg-bars"> </th>	
+			        <th  class="tg-uiversity"> </th>					
 					</tr>
 				</thead>
 				<tbody>

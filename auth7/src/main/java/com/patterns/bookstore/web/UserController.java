@@ -1,9 +1,12 @@
 package com.patterns.bookstore.web;
 
  
-import com.patterns.bookstore.model.Book;  
+import com.patterns.bookstore.model.Book;
+import com.patterns.bookstore.model.Discount;
 import com.patterns.bookstore.model.Review;
 import com.patterns.bookstore.model.User;
+import com.patterns.bookstore.purchasingFacade.OrderServiceFacade;
+import com.patterns.bookstore.purchasingFacade.OrderServiceFacadeImpl;
 import com.patterns.bookstore.repository.BookRepository;
 import com.patterns.bookstore.repository.ReviewRepository;
 import com.patterns.bookstore.repository.UserRepository;
@@ -55,7 +58,8 @@ public class UserController {
     @Autowired
     private ReviewRepository reviewRepository;
    
-
+    private OrderProcessController orderProcessController;
+    
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
     public String registration(Model model) {
         model.addAttribute("userForm", new User());
@@ -247,7 +251,7 @@ public class UserController {
     	
     	review.setBook_title(book_title);
     	review.setUsername(username);
-    	
+    	  
     	reviewRepository.save(review);
     	System.out.println("Reveiw:" + review);
     	
@@ -264,23 +268,31 @@ public class UserController {
     	return "reviewpage";
     }
     
+   @RequestMapping(value  ="/displayreview/{title}", method = RequestMethod.GET)
+    public String reviewpage(@Valid Review review, @PathVariable("title")String  book_title,  Model model) {
+    	
+    	Book book = bookRepository.findByTitle(book_title);
+    
+    	List<Review> books = book.getReviews();
+    	
+    	model.addAttribute("books", books);
+    	return "reviewpage";
+    }
+    
     @RequestMapping(value="addbook", method=RequestMethod.GET)
     public String addBook(Book book, @RequestParam("title") String title,
             						 @RequestParam("author") String author, 
             						 @RequestParam("price") double price, 
             						 @RequestParam("category") String category, 
             						 @RequestParam("image") String image, 
-            						 @RequestParam("qua  ntity") int quantity) {
+            						 @RequestParam("quantity") int quantity) {
     	
     	bookRepository.save(book);
       
     	return "bookAddedToDB";
     }
     
-    @RequestMapping(value  ="/displayreviews", method = RequestMethod.GET)
-    public String reviewpage() {
-    	return "reviewpage";
-    }
+
     
     @RequestMapping(value="/searchfunction", method=RequestMethod.GET)
     @ResponseBody
@@ -330,18 +342,29 @@ public class UserController {
         User user = userRepository.findByUsername(username);
         
         user.setShipping_address(shipping);
+        
+  
+        List<Book> shoppingcart = user.getShoppingCart();
+        
+        for(Book book: shoppingcart) {
+	        OrderProcessController controller=new OrderProcessController();
+	        controller.facade=new OrderServiceFacadeImpl();
+	        controller.orderProduct(book.getId());
+	        int newQuantity = book.getQuantity() - 1;
+        	book.setQuantity(newQuantity);
+	        boolean result=controller.orderFulfilled;
+	        System.out.println(result);
+        }
+        System.out.println("Stock Updated");
+        user.clearShoppingCart();
+        System.out.println("Shopping cart cleared");
         userRepository.save(user);
+        System.out.println("");
         
     	return "confirmpage";
     }
     
-    @RequestMapping(value="paymentpage", method=RequestMethod.GET)
-    public String confirmPaymentPage(Model model) {
-    	
-    
-    	
-    	return "confirmpage";
-    }
+
     
     @RequestMapping(value="customerorders", method=RequestMethod.GET)
     public String customerOrderPage(Model model) {
@@ -353,6 +376,36 @@ public class UserController {
         model.addAttribute("user", user);
     	
     	return "confirmpage";
+    }
+    
+    @RequestMapping(value="/calculatediscount", method=RequestMethod.GET)
+    public String DiscountSingletonCalculator(Model model, @RequestParam("code") String code, @RequestParam("price") double price) {
+    	
+    	
+    	Discount dc = Discount.getInstance();
+    	Double total = price - (price * 0.10);
+    	 
+    	if (dc.calculatePrice(code) == true)
+    	{
+    		System.out.print("Correct Code " + code);
+    		System.out.println(total);
+    	}
+    	else
+    	{
+    		System.out.print("Wrong Code " + code);
+    	}
+    	
+    	model.addAttribute("total", total);
+    	
+    	return "paymentPage";
+
+    }
+    
+    @RequestMapping(value="/paymentpage", method=RequestMethod.GET)
+    public String purchasingFacade() {
+    	
+    
+    	return"confirmpage";
     }
     
     
