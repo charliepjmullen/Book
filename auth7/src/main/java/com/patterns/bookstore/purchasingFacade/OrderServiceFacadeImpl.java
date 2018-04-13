@@ -1,6 +1,6 @@
 package com.patterns.bookstore.purchasingFacade;
 
-import com.patterns.bookstore.model.Book;
+import com.patterns.bookstore.model.Book; 
 import com.patterns.bookstore.service.PurchasingService;
 import com.patterns.bookstore.service.StockService;
 

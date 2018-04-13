@@ -5,10 +5,13 @@ import com.patterns.bookstore.model.Book;
 import com.patterns.bookstore.model.Discount;
 import com.patterns.bookstore.model.Review;
 import com.patterns.bookstore.model.User;
+import com.patterns.bookstore.model.UserPurchaseHistory;
 import com.patterns.bookstore.purchasingFacade.OrderServiceFacade;
 import com.patterns.bookstore.purchasingFacade.OrderServiceFacadeImpl;
+import com.patterns.bookstore.purchasingPrototype.CloneFactory;
 import com.patterns.bookstore.repository.BookRepository;
 import com.patterns.bookstore.repository.ReviewRepository;
+import com.patterns.bookstore.repository.UserPurchaseHistoryRepository;
 import com.patterns.bookstore.repository.UserRepository;
 import com.patterns.bookstore.service.BookService;
 import com.patterns.bookstore.service.SecurityService;
@@ -58,6 +61,9 @@ public class UserController {
     @Autowired
     private ReviewRepository reviewRepository;
    
+    @Autowired
+    private UserPurchaseHistoryRepository userPurchaseHistoryRepository;
+    
     private OrderProcessController orderProcessController;
     
     @RequestMapping(value = "/registration", method = RequestMethod.GET)
@@ -337,9 +343,10 @@ public class UserController {
     			           "Card Number: " + carddetails + "\n" +
     			           "CVV: " + cvv + "\n");
     	
+    	User user = new User();
     	Authentication loggedInUser = SecurityContextHolder.getContext().getAuthentication();
         String username = loggedInUser.getName(); // Authentication for 
-        User user = userRepository.findByUsername(username);
+        user = userRepository.findByUsername(username);
         
         user.setShipping_address(shipping);
         
@@ -355,11 +362,50 @@ public class UserController {
 	        boolean result=controller.orderFulfilled;
 	        System.out.println(result);
         }
+        
         System.out.println("Stock Updated");
+
+        
+        CloneFactory userCloner = new CloneFactory();
+        
+        // Creates new instance of User
+        
+        
+        User userClone = (User) userCloner.getClone(user);
+        
+        UserPurchaseHistory userPurchaseHistory = new UserPurchaseHistory();
+        
+        
+       
+        System.out.println("");
+         
+        List<String> purchaseHistoryList = new ArrayList<String>();
+        
+        
+        for(Book book: shoppingcart) {
+        	String booktitle = book.getTitle();
+        	purchaseHistoryList.add(booktitle);
+        }
+        
         user.clearShoppingCart();
         System.out.println("Shopping cart cleared");
+        userPurchaseHistory.setUsername(userClone.getUsername());
+        userPurchaseHistory.setShipping_address(userClone.getShipping_address());
+        userPurchaseHistory.setPurchaseHistory(purchaseHistoryList);
+         System.out.println(purchaseHistoryList);
+     
         userRepository.save(user);
-        System.out.println("");
+        userPurchaseHistoryRepository.save(userPurchaseHistory);
+        
+        System.out.println("User 1");
+        System.out.println("User : " + System.identityHashCode(System.identityHashCode(user)));
+        System.out.println("Username : " + user.getUsername());
+        System.out.println("Shopping Cart" + user.getShoppingCart());
+        System.out.println("=======================================");
+        System.out.println("User : " + System.identityHashCode(System.identityHashCode(userClone)));
+        System.out.println("User 2: " + userClone.getUsername());
+        System.out.println("Username : " + userClone.getShoppingCart());
+        
         
     	return "confirmpage";
     }
@@ -406,6 +452,8 @@ public class UserController {
     	
     
     	return"confirmpage";
+    	
+    	
     }
     
     

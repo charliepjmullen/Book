@@ -3,12 +3,13 @@ package com.patterns.bookstore.model;
 import javax.persistence.*;  
 
 import com.patterns.bookstore.model.Book;
+import com.patterns.bookstore.purchasingPrototype.UserClone;
 
 import java.util.List;
 import java.util.Set;
 
 @Entity
-public class User {
+public class User implements UserClone {
     private Long id;
     private String username;
     private String password;
@@ -143,6 +144,25 @@ public class User {
 	
 	public void clearShoppingCart() {
 		shoppingCart.clear();
+	}
+
+	// Prototype pattern implentaion - making a clone
+	@Override
+	public UserClone makeCopy() {
+		// TODO Auto-generated method stub
+		System.out.println("User is being cloned");
+		
+		User userClone = null;
+		
+		try {
+			userClone = (User) super.clone();
+		}
+		
+		catch (CloneNotSupportedException e) {
+			System.out.println("User not cloned");
+			e.printStackTrace();
+		}
+		return userClone;
 	}
 
 	
