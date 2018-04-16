@@ -36,7 +36,7 @@
 
     </c:if>
 <a href = "viewShoppingCart">My Shopping Cart</a>    
-<a href = "viewallbooks">View All Books</a>
+<a href = "adminviewallbooks">View All Books</a>
 <a href = "addBook">Add Book</a>
 <a href = "viewOrders">View All Orders</a>
 </div>

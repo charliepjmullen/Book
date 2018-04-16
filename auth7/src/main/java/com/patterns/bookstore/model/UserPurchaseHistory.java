@@ -156,10 +156,11 @@ public class UserPurchaseHistory {
 		this.orderHistory = orderHistory;
 	}*/
 	
-	/*public void saveBookToShoppingCart(Book book) {
-		shoppingCart.add(book);
+	public void saveBookToPurchaseHistory(String book) {
+		purchaseHistory.add(book);
 	}
-	
+
+	/*
 	public void removeBookFromShoppingCart(Book book) {
 		shoppingCart.remove(book);
 	}

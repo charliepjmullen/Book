@@ -132,6 +132,54 @@ public class UserController {
     	return "bookList";
     }
     
+    @RequestMapping(value = "adminviewallbooks", method = RequestMethod.GET)
+    public String adminbookList(@Valid Book book, Model model) {
+    	List<Book> booksList = new ArrayList<>();
+    	booksList = bookRepository.findAll();
+    	
+    	model.addAttribute("booksList", booksList);
+    	
+    	return "adminviewallbooks";
+    }
+    
+    @RequestMapping(value = " /updatequantityform/{bookId}", method=RequestMethod.GET)
+    public String updateQuantityForm(@PathVariable("bookId")Long id, Model model) {
+
+      
+      //Retrieve book
+      Book book = bookRepository.findById(id);
+      Long bookId = book.getId();
+      String title = book.getTitle();
+      String author = book.getAuthor();
+      String category = book.getCategory();
+      double price = book.getPrice();
+      String image = book.getImage();
+      
+      model.addAttribute("bookId", bookId);
+      model.addAttribute("title", title);
+      model.addAttribute("author", author);
+      model.addAttribute("category", category);
+      model.addAttribute("price", price);
+      model.addAttribute("image", image);
+  
+      return "updatequantityform";
+    }
+    
+    
+    @RequestMapping(value="/updatequantity/{title}", method=RequestMethod.GET)
+    public String updateBookQuantity(@Valid Book book, @RequestParam("quantity") int quantity, @PathVariable("title")String  book_title,  Model model) {
+    	
+        book = bookRepository.findByTitle(book_title);
+    	book.setQuantity(quantity);
+    	System.out.println(book_title + " quantity updated by: " + quantity);
+    	
+    	bookRepository.save(book);
+    	
+    
+    	
+    	return "bookupdated";
+    }
+    
     
     @RequestMapping(value = "/addBook", method = RequestMethod.GET)
     public String addBook(@Valid Book book, Model model, BindingResult result) {
@@ -317,7 +365,11 @@ public class UserController {
     }
     
     @RequestMapping(value="viewOrders", method=RequestMethod.GET)
-    public String viewAllOrders() {
+    public String viewAllOrders(Model model) {
+    	
+    	List<UserPurchaseHistory> purchaseHistory = userPurchaseHistoryRepository.findAll();
+    	
+    	model.addAttribute("purchaseHistory", purchaseHistory);
     	
     	return "customerOrders";
     }
